@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ContainerLeft = styled.div`
-  margin: 16px 0 0;
+  margin: 24px 0 0;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const ContainerLeft = styled.div`
 `;
 
 export const ContainerRight = styled.div`
-  margin: 16px 0 0 16px;
+  margin: 24px 0 0 16px;
   padding: 32px;
   display: flex;
   flex-direction: column;

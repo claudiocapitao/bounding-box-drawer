@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useRef, useMemo } from 'react';
 import * as S from './DrawingCanvas.styled';
+import cuid from "cuid";
 
 const DrawingCanvas = (image) => {
+  // Get image dimensions
   const [imageOriginalSize, setImageOriginalSize] = useState();
   const canvasHeight = useMemo(() => imageOriginalSize?.height ? imageOriginalSize?.height*500/imageOriginalSize?.width : 0, [imageOriginalSize]);
   console.log('canvasHeight: ', canvasHeight); 
@@ -45,6 +47,8 @@ const DrawingCanvas = (image) => {
       height: undefined,
     }
   );
+  
+  // Funtion to show the saved boxes in the canvas
   const showSavedRects = () => {
     if(savedRects.length > 0){
       savedRects.map(rect => {
@@ -61,17 +65,20 @@ const DrawingCanvas = (image) => {
     }
     return;
   };
+
+  // Canvas initialization
   useEffect(() => {
-   
     const canvas = canvasRef.current;
-    canvasRef.width = 500;
-    canvasRef.height = 1000;
+    /* canvasRef.width = 500;
+    canvasRef.height = 1000; */
     const context = canvas.getContext('2d')
     context.lineCap = 'round';
     context.strokeStyle = 'black';
     context.lineWidth = 1;
     contextRef.current = context;
   }, []);
+
+  // When one saved box is selected
   useEffect(() => {
     contextRef.current.clearRect(0, 0, 500, canvasHeight);
     showSavedRects();
@@ -81,8 +88,10 @@ const DrawingCanvas = (image) => {
       typeManipulatedRect.y, 
       typeManipulatedRect.width, 
       typeManipulatedRect.height);
-  }, [typeManipulatedRect])
-  const startDrawing = ({nativeEvent}) => {  
+    }, [typeManipulatedRect])
+
+    //Drawing - START
+    const startDrawing = ({nativeEvent}) => {  
       setModifySavedRect(
           {
             id: '',
@@ -109,6 +118,8 @@ const DrawingCanvas = (image) => {
     setIsDrawing(true);
     nativeEvent.preventDefault();
   };
+
+  //Drawing - While Drawing
   const draw = ({nativeEvent}) => {
     if(!isDrawing){
       return;
@@ -133,13 +144,14 @@ const DrawingCanvas = (image) => {
     );
     nativeEvent.preventDefault();
   };
+
+  //Drawing - END
   const stopDrawing = (nativeEvent) => {
     contextRef.current.closePath();
     setIsDrawing(false);
     if(!modifySavedRect?.id){
       setTypeManipulatedRect(createdRect.current)
     }
-    
   };
 
   return(
